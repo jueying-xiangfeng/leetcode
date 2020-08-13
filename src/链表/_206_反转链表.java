@@ -39,13 +39,23 @@ public class _206_反转链表 {
 			return head;
 		}
 		
-		ListNode newNode = null;
-		while (head != null) {
+		// 头插法
+		ListNode newNode = head;
+		while (head.next != null) {
 			ListNode temNode = head.next;
-			head.next = newNode;
-			newNode = head;
-			head = temNode;
+			head.next = temNode.next;
+			temNode.next = newNode;
+			newNode = temNode;
 		}
+		
+		
+//		ListNode newNode = null;
+//		while (head != null) {
+//			ListNode temNode = head.next;
+//			head.next = newNode;
+//			newNode = head;
+//			head = temNode;
+//		}
 		
 		return newNode;
 	}
