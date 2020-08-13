@@ -97,4 +97,12 @@ public class LinkedList<E> extends AbstractList<E> {
 		}
 		return node;
 	}
+	
+	
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
 }
