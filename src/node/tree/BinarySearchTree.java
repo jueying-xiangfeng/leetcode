@@ -49,7 +49,8 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 	}
 	
 	public void clear() {
-		
+		root = null;
+		size = 0;
 	}
 	
 	public void add(E element) {
@@ -88,15 +89,116 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 		}
 		size ++;
 	}
-	
+	/**
+	 * 删除
+	 * 
+	 * 1、删除度为2的节点
+	 * - 先用前驱或者后继节点的值覆盖原节点的值
+	 * - 删除相应的前驱或者后继节点
+	 * - 如果一个节点的度为2，那么他的前去或者后继节点的度只能为0或1
+	 * 
+	 * 2、删除度为1的节点
+	 * - 用子节点代替原节点的位置
+	 * 		- child 是 node.left  或者  child 是 node.right
+	 * 
+	 * - 用 child 代替 node 的位置
+	 * 		- 如果 node 是左子节点
+	 * 		- child.parent = node.parent
+	 * 		- node.parent.left = child
+	 * 	
+	 * 		- 如果 node 是右子节点
+	 * 		- child.parent = node.parent
+	 * 		- child.parent.right = child
+	 * 
+	 * 		- 如果 node 是根节点
+	 * 		- root = child
+	 * 		- child.parent = null
+	 * 
+	 * 3、删除叶子节点
+	 * 
+	 * 直接删除
+	 * 
+	 * - node == node.parent.left
+	 * 		- node.parent.left = null
+	 * 
+	 * - node == node.parent.right
+	 * 		- node.parent.right = null
+	 * 
+	 * - node.parent == null
+	 * 		- root = null
+	 * 
+	 * 
+	 * @param element
+	 */
 	public void remove(E element) {
-		
+		remove(node(element));
 	}
 	
 	public boolean contains(E element) {
 		
-		return false;
+		return node(element) != null;
 	}
+	
+	private void remove(Node<E> node) {
+		
+		if (node == null) return;
+		
+		size --;
+		
+		// 度为2的节点
+		if (node.left != null && node.right != null) {
+			// 找到后继节点
+			Node<E> s = successor(node);
+			// 使用后继节点的值覆盖当前节点
+			node.element = s.element;
+			node = s;
+		}
+		// 删除 node 节点，node 的度必然为 1 或 0
+		Node<E> replacement = node.left != null ? node.left : node.right;
+		
+		// node 是度为1的节点
+		if (replacement != null) {
+			// 更改 parent
+			replacement.parent = node.parent;
+			// 更改 parent 的 left、right 指向
+			if (node.parent == null) {
+				root = replacement;
+			} else if (node == node.parent.left) {
+				node.parent.left = replacement;
+			} else {
+				node.parent.right = replacement;
+			}
+		} 
+		// node 是叶子节点 并且是根节点
+		else if (node.parent == null) {
+			root = null;
+		}
+		// node 是叶子节点。但不是根节点
+		else {
+			if (node == node.parent.left) {
+				node.parent.left = null;
+			} else {
+				node.parent.right = null;
+			}
+		}
+	}
+	
+	private Node<E> node(E element) {
+		Node<E> node = root;
+		int cmp = 0;
+		while (node != null) {
+			cmp = compare(element, node.element);
+			if (cmp == 0) return node;
+			
+			if (cmp > 0) {
+				node = node.right;
+			} else {
+				node = node.left;
+			}
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * @return
@@ -398,6 +500,72 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 			}
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * 前驱结点
+	 * 中序遍历时的前一个节点 (如果是二叉搜索树，前驱结点就是前一个比它小的节点)
+	 * 
+	 * - node.left != null
+	 * 		- predecessor = node.left.right.right.right...
+	 * 		- 终止：right = null
+	 * 
+	 * - node.left == null && node.parent != null
+	 * 		- predecessor = node.parent.parent.parent...
+	 * 		- 终止：node 在 parent 的右子树中
+	 * 
+	 * - node.left == null && node.parent == null
+	 * 		- 没有前驱节点 (根节点)
+	 * 
+	 */
+	@SuppressWarnings("unused")
+	private Node<E> predecessor(Node<E> node) {
+		
+		if (node == null) return null;
+		
+		Node<E> p = node.left;
+		if (p != null) {
+			while (p.right != null) {
+				p = p.right;
+			}
+ 			return p;
+		}
+		
+		// 从父节点、祖父节点中寻找前驱结点
+		while (node.parent != null && node == node.parent.left) {
+			node = node.parent;
+		}
+		
+		// node.parent = null
+		// node = node.parent.right
+		return node.parent;
+	}
+	
+	/**
+	 * 后继节点
+	 */
+	@SuppressWarnings("unused")
+	private Node<E> successor(Node<E> node) {
+		
+		if (node == null) return null;
+		
+		Node<E> p = node.right;
+		if (p != null) {
+			while (p.left != null) {
+				p = p.left;
+			}
+ 			return p;
+		}
+		
+		// 从父节点、祖父节点中寻找后继结点
+		while (node.parent != null && node == node.parent.right) {
+			node = node.parent;
+		}
+		
+		// node.parent = null
+		// node = node.parent.left
+		return node.parent;
 	}
 	
 	

@@ -24,37 +24,37 @@ public class _104_二叉树的最大深度 {
 	
     public int maxDepth(TreeNode root) {
     	
-//    	if (root == null) return 0;
-//    	
-//    	int maxDepth = 0;
-//    	int levelSize = 1;
-//    	Queue<TreeNode> queue = new LinkedList<>();
-//    	queue.offer(root);
-//    	
-//    	while (!queue.isEmpty()) {
-//			
-//    		TreeNode node = queue.poll();
-//    		levelSize --;
-//    		
-//    		if (node.left != null) {
-//				queue.offer(node.left);
-//			}
-//    		if (node.right != null) {
-//    			queue.offer(node.right);
-//    		}
-//    		
-//    		if (levelSize == 0) {
-//				levelSize = queue.size();
-//				maxDepth ++;
-//			}
-//		}
-//    	
-//    	return maxDepth;
+    	if (root == null) return 0;
+    	
+    	int maxDepth = 0;
+    	int levelSize = 1;
+    	Queue<TreeNode> queue = new LinkedList<>();
+    	queue.offer(root);
+    	
+    	while (!queue.isEmpty()) {
+			
+    		TreeNode node = queue.poll();
+    		levelSize --;
+    		
+    		if (node.left != null) {
+				queue.offer(node.left);
+			}
+    		if (node.right != null) {
+    			queue.offer(node.right);
+    		}
+    		
+    		if (levelSize == 0) {
+				levelSize = queue.size();
+				maxDepth ++;
+			}
+		}
+    	
+    	return maxDepth;
     	
     	/**
     	 * 递归
     	 */
-    	return root == null ? 0 : (Math.max(maxDepath(root.left), maxDepth(root.right) + 1));
+//    	return root == null ? 0 : (Math.max(maxDepath(root.left), maxDepth(root.right) + 1));
     }
 
 	private int maxDepath(TreeNode left) {
