@@ -117,6 +117,22 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		toString(root, sb, "");
+		return sb.toString();
+	}
+	
+	private void toString(Node<E> node, StringBuilder sb, String prefix) {
+		if (node == null) return;
+		
+		toString(node.left, sb, prefix + "L--");
+		sb.append(prefix).append(node.element).append("\n");
+		toString(node.right, sb, prefix + "R--");
+	}
+	
+	
 	private static class Node<E> {
 		E element;
 		Node<E> left;
@@ -127,6 +143,10 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 			this.element = element;
 			this.parent = parent;
 		}
+		
+		public boolean isLeaf() {
+			return left == null && right == null;
+		}
 	}
 
 	/**
@@ -136,6 +156,12 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 	 * - 中序遍历 (Inorder Traversal)
 	 * - 后序遍历 (Postorder Traversal)
 	 * - 层序遍历 (Level Order Traversal)
+	 * 
+	 * 
+	 * - 前序遍历：树状结构展示 (注意左右子树的顺序)
+	 * - 中序遍历：二叉搜索树的中序遍历按升序或者降序处理节点
+	 * - 后序遍历：适用于一些先子后父的操作
+	 * - 层序遍历：计算二叉树高度、判断一棵树是否为完全二叉树
 	 * 
 	 */
 	
@@ -226,28 +252,32 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 	 * 遍历接口设计
 	 */
 	public void preorder(Visitor<E> visitor) {
+		if (visitor == null) return;
 		preorder(root, visitor);
 	}
 	private void preorder(Node<E> node, Visitor<E> visitor) {
-		if (node == null) { return; }
+		if (node == null || visitor.stop) { return; }
 		
-		visitor.visit(node.element);
+		visitor.stop = visitor.visit(node.element);
 		preorder(node.left, visitor);
 		preorder(node.right, visitor);
 	}
 	
 	public void inorder(Visitor<E> visitor) {
+		if (visitor == null) return;
 		inorder(root, visitor);
 	}
 	private void inorder(Node<E> node, Visitor<E> visitor) {
-		if (node == null) { return; }
+		if (node == null || visitor.stop) { return; }
 		
 		inorder(node.left, visitor);
-		visitor.visit(node.element);
+		if (visitor.stop) return;
+		visitor.stop = visitor.visit(node.element);
 		inorder(node.right, visitor);
 	}
 	
 	public void postorder(Visitor<E> visitor) {
+		if (visitor == null) return;
 		postorder(root, visitor);
 	}
 	private void postorder(Node<E> node, Visitor<E> visitor) {
@@ -255,14 +285,16 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 		
 		postorder(node.left, visitor);
 		postorder(node.right, visitor);
-		visitor.visit(node.element);
+		if (visitor.stop) return;
+		visitor.stop = visitor.visit(node.element);
 	}
 	
 	public void levelOrder(Visitor<E> visitor) {
+		if (visitor == null) return;
 		levelOrder(root, visitor);
 	}
 	private void levelOrder(Node<E> node, Visitor<E> visitor) {
-		if (node == null || visitor == null) { return; }
+		if (node == null) { return; }
 		
 		Queue<Node<E>> queue = new LinkedList<>();
 		queue.offer(node);
@@ -270,7 +302,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 		while (!queue.isEmpty()) {
 			Node<E> tmpNode = queue.poll();
 			
-			visitor.visit(tmpNode.element);
+			if (visitor.visit(tmpNode.element)) return;
 			
 			if (tmpNode.left != null) {
 				queue.offer(tmpNode.left);
@@ -282,8 +314,101 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 	}
 	
 	
-	public static interface Visitor<E> {
-		void visit(E element);
+	/**
+	 * 求树的高度
+	 */
+	public int height() {
+		return height(root);
+	}
+	private int height(Node<E> node) {
+		if (node == null) return 0;
+		return 1 + Math.max(height(node.left), height(node.right));
+	}
+	
+	// 非递归求高度
+	public int height1() {
+		return height1(root);
+	}
+	private int height1(Node<E> node) {
+		if (node == null) return 0;
+		// 树的高度
+		int height = 0;
+		// 存储着每一层的元素数量
+		int levelSize = 1;
+		Queue<Node<E>> queue = new LinkedList<>();
+		queue.offer(node);
+		
+		while (!queue.isEmpty()) {
+			Node<E> tmpNode = queue.poll();
+			levelSize --;
+			
+			if (tmpNode.left != null) {
+				queue.offer(tmpNode.left);
+			}
+			if (tmpNode.right != null) {
+				queue.offer(tmpNode.right);
+			}
+			// 意味着要访问下一层
+			if (levelSize == 0) {
+				levelSize = queue.size();
+				height ++;
+			}
+		}
+		return height;
+	}
+	
+	
+	/**
+	 * 判断是否是完全二叉树 - (层序遍历)
+	 * 
+	 * - 树为空 - false
+	 * - left != null 入队
+	 * - left == null && right != null - false
+	 * - right != null 入队
+	 * - right == null (则有两种情况，作为空或者不为空，不管哪种情况，
+	 * 		后面的节点都用该为叶子节点，否则 - false)
+	 * 
+	 * - 遍历结束，返回 true
+	 * 
+	 */
+	public boolean isComplete() {
+		if (root == null) return false;
+		
+		boolean leaf = false;
+		Queue<Node<E>> queue = new LinkedList<>();
+		queue.offer(root);
+		
+		while (!queue.isEmpty()) {
+			Node<E> node = queue.poll();
+			
+			if (leaf && !node.isLeaf()) return false;
+			
+			if (node.left != null) {
+				queue.offer(node.left);
+			} else {
+				if (node.right != null) {
+					return false;
+				}
+			}
+			
+			if (node.right != null) {
+				queue.offer(node.right);
+			} else {
+				leaf = true;
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	
+	public static abstract class Visitor<E> {
+		boolean stop;
+		/**
+		 * @return 返回 true 代表停止遍历
+		 */
+		public abstract boolean visit(E element);
 	}
 	
 	
