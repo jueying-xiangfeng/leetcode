@@ -1,9 +1,6 @@
 package 二叉树;
 
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 /**
@@ -71,43 +68,77 @@ public class _662_二叉树最大宽度 {
 	
     public int widthOfBinaryTree(TreeNode root) {
         
-    	if (root == null) return 0;
-    	
     	int width = 0;
-    	Queue<TreeNode> queue = new LinkedList<>();
+    	if (root == null) return width;
+    	
+    	Queue<TreeNode> queue = new LinkedList<TreeNode>();
     	queue.offer(root);
     	int levelSize = 1;
-    	
-    	Deque<Object> deque = new LinkedList<>();
-    	String placeholder = "a";
+    	LinkedList<Integer> indexList = new LinkedList<Integer>();
+    	indexList.add(1);
     	
     	while (!queue.isEmpty()) {
-			TreeNode node = queue.poll();
+    		TreeNode node = queue.poll();
     		levelSize --;
     		
-    		boolean hasAdd = false;
+    		int index = indexList.removeFirst();
     		
     		if (node.left != null) {
 				queue.offer(node.left);
-				hasAdd = true;
-				deque.add(node.left);
+				indexList.add(index * 2);
 			}
     		if (node.right != null) {
 				queue.offer(node.right);
-				hasAdd = true;
-				deque.add(node.right);
+				indexList.add(index * 2 + 1);
 			}
-    		if (hasAdd == false) {
-    			deque.add(placeholder);
-			}
-    		
     		if (levelSize == 0) {
+				if (indexList.size() >= 1) {
+					width = Math.max(indexList.getLast() - indexList.getFirst() + 1, width);
+				}
 				levelSize = queue.size();
-				
-				
-				
 			}
 		}
+    	
     	return width;
+    	
+    	
+//    	if (root == null) return 0;
+//    	
+//    	int width = 0;
+//    	Queue<TreeNode> queue = new LinkedList<>();
+//    	queue.offer(root);
+//    	int levelSize = 1;
+//    	
+//    	ArrayList<Object> arrayList = new ArrayList<>();
+//    	String placeholder = "a";
+//    	
+//    	while (!queue.isEmpty()) {
+//			TreeNode node = queue.poll();
+//    		levelSize --;
+//    		
+//    		boolean hasAdd = false;
+//    		
+//    		if (node.left != null) {
+//				queue.offer(node.left);
+//				hasAdd = true;
+//				arrayList.add(node.left);
+//			}
+//    		if (node.right != null) {
+//				queue.offer(node.right);
+//				hasAdd = true;
+//				arrayList.add(node.right);
+//			}
+//    		if (hasAdd == false) {
+//    			arrayList.add(placeholder);
+//			}
+//    		
+//    		if (levelSize == 0) {
+//				levelSize = queue.size();
+//				
+//				
+//				
+//			}
+//		}
+//    	return width;
     }
 }
