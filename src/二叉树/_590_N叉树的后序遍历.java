@@ -35,21 +35,17 @@ public class _590_N叉树的后序遍历 {
     	
     	Node pre = null;
     	
-    	// 1, 2, 3
-    	
     	while (!stack.isEmpty()) {
     		Node top = stack.peek();
     		
-    		if ((top.children == null && top.children.size() == 0) || top.children.contains(pre)) {
-    			node = stack.pop();
-				list.add(node.val);
-				pre = node;
+    		if (top.children.isEmpty() || top.children.contains(pre)) {
+    			stack.pop();
+				list.add(top.val);
+				pre = top;
 			} else {
-				if (node.children != null && node.children.size() > 0) {
-					for (int i = node.children.size() - 1; i >= 0; i--) {
-						if (node.children.get(i) != null) {
-							stack.push(node.children.get(i));
-						}
+				if (!top.children.isEmpty()) {
+					for (int i = top.children.size() - 1; i >= 0; i--) {
+						stack.push(top.children.get(i));
 					}
 				}
 			}
