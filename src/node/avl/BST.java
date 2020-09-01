@@ -72,7 +72,7 @@ public class BST<E> extends BinaryTree<E> {
 		size ++;
 		
 		// 新添加节点之后的处理
-		afterAdd(root);
+		afterAdd(newNode);
 	}
 	/**
 	 * 添加 node 之后的调整
@@ -125,6 +125,12 @@ public class BST<E> extends BinaryTree<E> {
 		remove(node(element));
 	}
 	
+	/**
+	 * 删除 node 之后的调整
+	 * @param node
+	 */
+	protected void afterRemove(Node<E> node) { }
+	
 	public boolean contains(E element) {
 		return node(element) != null;
 	}
@@ -171,6 +177,7 @@ public class BST<E> extends BinaryTree<E> {
 				node.parent.right = null;
 			}
 		}
+		afterRemove(node);
 	}
 	
 	private Node<E> node(E element) {

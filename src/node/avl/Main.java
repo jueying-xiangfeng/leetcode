@@ -8,19 +8,21 @@ public class Main {
 		
 		Integer data[] = new Integer[] {
 				
-				7, 4, 9, 2 ,5, 8, 11, 1
+				74, 10, 15, 54, 50, 6, 9, 5, 14, 78, 79, 82, 12, 90
 		};
 		
-		BST<Integer> bst = new BST<Integer>();
+		AVLTree<Integer> avl = new AVLTree<Integer>();
 		for (int i = 0; i < data.length; i++) {
-			bst.add(data[i]);
+			avl.add(data[i]);
 		}
 		
-		BinaryTrees.println(bst);
+		BinaryTrees.println(avl);
+		System.out.println("\n----------------------------------\n");
+		avl.remove(79);
+		avl.remove(90);
+		avl.remove(82);
 		
-		bst.remove(4);
-		
-		BinaryTrees.println(bst);
+		BinaryTrees.println(avl);
 	}
 	
 	public static void main(String[] args) {
