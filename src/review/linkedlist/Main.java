@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		List<Integer> list = new LinkedList<Integer>();
+		List<Integer> list = new SingleLinkedList<Integer>();
 		list.add(1);
 		list.add(2);
 		list.add(3);
@@ -27,7 +27,13 @@ public class Main {
 		System.out.println(list);
 		
 		
-		
+		/*
+		  	size=5, [1, 2, 3, 4, 5]
+			----------
+			size=6, [6, 1, 2, 3, 4, 5]
+			----------
+			size=3, [1, 3, 4]
+		 */
 		
 	}
 	

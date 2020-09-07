@@ -25,4 +25,37 @@ public class _160_相交链表 {
 		}
     	return pA;
     }
+    
+    public ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
+        
+    	if (headA == null || headB == null) {
+			return null;
+		}
+    	
+    	ListNode lastB = headB;
+    	while (headB != null) {
+			lastB = headB.next;
+		}
+    	lastB.next = headB;
+    	
+    	ListNode fast = headA;
+    	ListNode slow = headA;
+    	
+    	while (fast != null && fast.next != null) {
+			fast = fast.next.next;
+			slow = slow.next;
+			// 如果有环则相遇
+			if (fast == slow) {
+				slow = headA;
+				while (slow != fast) {
+					slow = slow.next;
+					fast = fast.next;
+				}
+				lastB.next = null;
+				return fast;
+			}
+		}
+    	lastB.next = null;
+    	return null;
+    }
 }
