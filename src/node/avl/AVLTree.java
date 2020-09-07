@@ -15,7 +15,7 @@ import java.util.Comparator;
  * - 搜索、添加、删除 的时间复杂度是 O(logn)
  * 
  */
-public class AVLTree<E> extends BST<E> {
+public class AVLTree<E> extends BBSTree<E> {
 	public AVLTree() {
 		this(null);
 	}
@@ -84,51 +84,15 @@ public class AVLTree<E> extends BST<E> {
 		}
 	}
 	
-	private void rotate(
-			Node<E> r,
-			Node<E> a, Node<E> b, Node<E> c,
-			Node<E> d,
-			Node<E> e, Node<E> f, Node<E> g) {
-		// 让 d 成为这棵树的根节点
-		d.parent = r.parent;
-		if (r.isLeftChild()) {
-			r.parent.left = d;
-		} else if (r.isRightChild()) {
-			r.parent.right = d;
-		} else {
-			root = d;
-		}
+	@Override
+	protected void rotate(Node<E> r, Node<E> a, Node<E> b, Node<E> c, Node<E> d, Node<E> e, Node<E> f, Node<E> g) {
+		super.rotate(r, a, b, c, d, e, f, g);
 		
-		// a b c
-		b.left = a;
-		if (a != null) {
-			a.parent = b;
-		}
-		b.right = c;
-		if (c != null) {
-			c.parent = b;
-		}
+		// 更新高度
 		updateHeight(b);
-		
-		// e f g
-		f.left = e;
-		if (e != null) {
-			e.parent = f;
-		}
-		f.right = g;
-		if (g != null) {
-			g.parent = f;
-		}
 		updateHeight(f);
-		
-		// b f
-		d.left = b;
-		d.right = f;
-		b.parent = d;
-		f.parent = d;
 		updateHeight(d);
 	}
-	
 	
 	/**
 	 * 恢复平衡，grand -- 高度最低的哪个不平衡节点
@@ -156,45 +120,9 @@ public class AVLTree<E> extends BST<E> {
 		}
 	}
 	
-	private void rotateLeft(Node<E> grand) {
-		Node<E> parent = grand.right;
-		Node<E> child = parent.left;
-		// 旋转
-		grand.right = child;
-		parent.left = grand;
-
-		// 更新子树根节点、父节点、高度
-		afterRotate(grand, parent, child);
-	}
-	
-	private void rotateRight(Node<E> grand) {
-		Node<E> parent = grand.left;
-		Node<E> child = parent.right;
-		// 旋转
-		grand.left = child;
-		parent.right = grand;
-		// 更新子树根节点、父节点、高度
-		afterRotate(grand, parent, child);
-	}
-	
-	private void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
-		// 让 parent 成为子树的根节点
-		parent.parent = grand.parent;
-		if (grand.isLeftChild()) {
-			grand.parent.left = parent;
-		} else if (grand.isRightChild()) {
-			grand.parent.right = parent;
-		} else {
-			root = parent;
-		}
-				
-		// 更新 child 的 parent
-		if (child != null) {
-			child.parent = grand;
-		}
-		// 更新 grand 的 parent
-		grand.parent = parent;
-				
+	@Override
+	protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
+		super.afterRotate(grand, parent, child);
 		// 更新高度
 		updateHeight(grand);
 		updateHeight(parent);

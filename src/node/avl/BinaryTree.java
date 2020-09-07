@@ -46,6 +46,16 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 		public boolean isRightChild() {
 			return parent != null && this == parent.right;
 		}
+		// 获取兄弟节点
+		public Node<E> sibling() {
+			if (isLeftChild()) {
+				return parent.right;
+			}
+			if (isRightChild()) {
+				return parent.left;
+			}
+			return null;
+		}
 	}
 	
 	/**
@@ -296,12 +306,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 
 	@Override
 	public Object string(Object node) {
-		Node<E> myNode = (Node<E>)node;
-		String parentString = "null";
-		if (myNode.parent != null) {
-			parentString = myNode.parent.element.toString();
-		}
-		return myNode.element + "_p(" + parentString + ")";
+		return node;
 	}
 	
 }

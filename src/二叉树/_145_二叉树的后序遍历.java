@@ -49,7 +49,7 @@ public class _145_二叉树的后序遍历 {
     	
     	Stack<TreeNode> stack = new Stack<>();
     	stack.push(node);
-    	TreeNode preNode = null;
+    	TreeNode preNode = node;
     	
     	while (!stack.isEmpty()) {
 			
