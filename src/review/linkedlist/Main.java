@@ -1,6 +1,5 @@
 package review.linkedlist;
 
-
 public class Main {
 
 	static void testList(List<Integer> list) {
@@ -24,8 +23,49 @@ public class Main {
 		Asserts.test(list.get(1) == 66);
 		Asserts.test(list.get(list.size() - 1) == 44);
 		
+		
+//		list.remove(0);
+//		list.remove(0);
+//		list.remove(0);
+//		list.remove(0);
+		
+		
 		System.out.println(list);
 	}
+	
+	
+	static void josephus() {
+		CircleLinkedList<Integer> list = new CircleLinkedList<>();
+		for (int i = 1; i <= 8; i++) {
+			list.add(i);
+		}
+		
+		// 设置 current 指向头结点
+		list.reset();
+		
+		while (!list.isEmpty()) {
+			int n = 3;
+			while (n > 1) {
+				list.next();
+				n--;
+			}
+			
+			System.out.println(list.remove());
+		}
+	}
+	
+	/*
+	 * 
+	 * 
+3
+6
+1
+5
+2
+8
+4
+7
+	 * */
 	
 	
 	public static void main(String[] args) {
@@ -34,7 +74,9 @@ public class Main {
 		
 		
 		testList(new ArrayList<Integer>());
-		testList(new LinkedList<Integer>());
+		testList(new CircleLinkedList<Integer>());
+		
+		josephus();
 		
 		
 //		List<Integer> list = new LinkedList<Integer>();

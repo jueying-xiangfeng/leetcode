@@ -1,29 +1,27 @@
 package review.linkedlist;
 
-public class CircleLinkedList<E> extends AbstractList<E> {
+/**
+ * 单循环链表
+ * 
+ */
+
+public class SingleCircleLinkedList<E> extends AbstractList<E> {
 	
 	private Node<E> first;
-	private Node<E> last;
-	private Node<E> current;
 	
 	public static class Node<E> {
 		E element;
-		Node<E> prev;
 		Node<E> next;
 		
-		public Node(Node<E> prev, E element, Node<E> next) {
+		public Node(E element, Node<E> next) {
 			this.element = element;
-			this.prev = prev;
 			this.next = next;
 		}
 		
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			if (prev != null) {
-				sb.append(prev.element);
-			}
-			sb.append("_");
+			
 			sb.append(element);
 			sb.append("_");
 			if (next != null) {
@@ -33,37 +31,11 @@ public class CircleLinkedList<E> extends AbstractList<E> {
 		}
 	}
 	
-	public void reset() {
-		current = first;
-	}
-	
-	public E next() {
-		if (current == null) return null;
-		
-		current = current.next;
-		return current.element;
-	}
-	
-	public E remove() {
-		if (current == null) return null;
-		
-		Node<E> next = current.next;
-		E element = remove(current);
-		if (size == 0) {
-			current = null;
-		} else {
-			current = next;
-		}
-		return element;
-	}
-	
-	
 	
 	
 	@Override
 	public void clear() {
 		first = null;
-		last = null;
 		size = 0;
 	}
 
@@ -85,58 +57,37 @@ public class CircleLinkedList<E> extends AbstractList<E> {
 		
 		rangeCheckForAdd(index);
 		
-		if (index == size) {
-			Node<E> oldLast = last;
-			last = new Node<>(oldLast, element, first);
-			// 链表为空 -- node 为第一个添加的元素
-			if (oldLast == null) {
-				first = last;
-				first.next = first;
-				last.prev = first;
-			} else {
-				oldLast.next = last;
-				first.prev = last;
-			}
+		if (index == 0) {
+			Node<E> newFirst = new Node<E>(element, first);
+			Node<E> last = (size == 0) ? newFirst : node(size - 1);
+			last.next = newFirst;
+			first = newFirst;
 		} else {
-			Node<E> next = node(index);
-			Node<E> prev = next.prev;
-			Node<E> node = new Node<>(prev, element, next);
-			next.prev = node;
-			prev.next = node;
-			// index = 0
-			if (next == first) {
-				first = node;
-			}
+			Node<E> pre = node(index - 1);
+ 			pre.next = new Node<E>(element, pre.next);
 		}
-		
 		size ++;
 	}
 
 	@Override
 	public E remove(int index) {
-		rangeCheck(index);
-		return remove(node(index));
-	}
-	
-	private E remove(Node<E> node) {
-		if (size == 1) {
-			first = null;
-			last = null;
-		} else {
-			Node<E> prev = node.prev;
-			Node<E> next = node.next;
-			prev.next = next;
-			next.prev = prev;
-			// index = 0
-			if (node == first) {
-				first = next;
-			}
-			// index = size - 1
-			if (node == last) {
-				last = prev;
-			}
-		}
 		
+		rangeCheck(index);
+		Node<E> node = first;
+		if (index == 0) {
+			// 只有一个节点
+			if (size == 1) {
+				first = null;
+			} else {
+				Node<E> last = node(size - 1);
+				first = first.next;
+				last.next = first;
+			}
+		} else {
+			Node<E> pre = node(index - 1);
+			node = pre.next;
+			pre.next = node.next;
+		}
 		size --;
 		return node.element;
 	}

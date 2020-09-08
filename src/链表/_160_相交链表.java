@@ -33,8 +33,8 @@ public class _160_相交链表 {
 		}
     	
     	ListNode lastB = headB;
-    	while (headB != null) {
-			lastB = headB.next;
+    	while (lastB.next != null) {
+			lastB = lastB.next;
 		}
     	lastB.next = headB;
     	
