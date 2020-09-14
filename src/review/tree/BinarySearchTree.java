@@ -119,12 +119,55 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 	 * 		= root = child
 	 * 		= child.parent = null
 	 * 
-	 * 3、删除叶子节点
+	 * 3、删除叶子节点 - 直接删除
+	 * 
+	 * - node == node.parent.left
+	 * 		= node.parent.left = null
+	 * 
+	 * - node == node.parent.right
+	 * 		= node.parent.right = null
+	 * 
+	 * - node.parent == null
+	 * 		= root = null
 	 * 
 	 * @param node
 	 */
 	private void remove(Node<E> node) {
+		if (node == null) return;
 		
+		size --;
+		
+		if (node.hasTowChildren()) {
+			// 这里使用后继节点覆盖
+			Node<E> successor = successor(node);
+			node.element = successor.element;
+			node = successor;
+		}
+		// node 节点度为1或0
+		Node<E> replacement = node.left != null ? node.left : node.right;
+		
+		// 度为1
+		if (replacement != null) {
+			// 更改 parent
+			replacement.parent = node.parent;
+			// node 为 度为1的根节点
+			if (node.parent == null) {
+				root = replacement;
+			} else if (node.isLeftChild()) {
+				node.parent.left = replacement;
+			} else {
+				node.parent.right = replacement;
+			}
+		} else if (node.parent == null) {
+			root = null;
+		} else {
+			// 叶子节点
+			if (node.isLeftChild()) {
+				node.parent.left = null;
+			} else {
+				node.parent.right = null;
+			}
+		}
 	}
 	
 	/**

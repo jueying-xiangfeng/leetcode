@@ -31,6 +31,21 @@ public class Main {
 		}
 		
 		BinaryTrees.println(tree);
+		
+		System.out.println("================================");
+		
+		tree.remove(4);
+		
+		BinaryTrees.println(tree);
+		
+		System.out.println("================================");
+		
+		tree.remove(7);
+		
+		BinaryTrees.println(tree);
+		
+		System.out.println("================================");
+		
 	}
 	
 		
