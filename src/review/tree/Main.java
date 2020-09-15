@@ -118,13 +118,33 @@ public class Main {
 	}
 	
 	
+	static void avl_test() {
+		Integer data[] = new Integer[] {
+				
+				5, 97, 28, 62, 14, 37, 40, 15, 83, 24, 48, 16, 1, 61
+		};
+		
+		AVLTree<Integer> avl = new AVLTree<Integer>();
+		for (int i = 0; i < data.length; i++) {
+			avl.add(data[i]);
+		}
+		
+		BinaryTrees.println(avl);
+		
+		System.out.println("================================");
+		
+		avl.remove(83);
+		
+		BinaryTrees.println(avl);
+	}
+	
 		
 	public static void main(String[] args) {
 		
-		bst_test1();
+//		bst_test1();
 //		bst_test2();
 		
-		
+		avl_test();
 	}
 
 }

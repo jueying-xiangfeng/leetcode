@@ -23,7 +23,7 @@ import java.util.Comparator;
 @SuppressWarnings({"unchecked" })
 public class BinarySearchTree<E> extends BinaryTree<E> {
 	
-	private Comparator<E> comparator;
+	protected Comparator<E> comparator;
 	
 	public BinarySearchTree() {
 		this(null);
@@ -45,6 +45,8 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 		if (root == null) {
 			root = createNode(element, null);
 			size ++;
+			
+			afterAdd(root);
 			return;
 		}
 		
@@ -73,6 +75,9 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 			parent.left = newNode;
 		}
 		size ++;
+		
+		// 添加 node 之后的调整 
+		afterAdd(newNode);
 	}
 	
 	/**
@@ -92,6 +97,17 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 		return node(element) != null;
 	}
 	
+	/**
+	 * 添加 node 之后的调整
+	 * @param node - 新添加的节点
+	 */
+	protected void afterAdd(Node<E> node) {  }
+	
+	/**
+	 * 删除 node 之后的调整 
+	 * @param node - 被删除的节点
+	 */
+	protected void afterRemove(Node<E> node) {  }
 	
 	
 	
@@ -158,6 +174,9 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 			} else {
 				node.parent.right = replacement;
 			}
+			
+			afterRemove(node);
+			
 		} else if (node.parent == null) {
 			root = null;
 		} else {
@@ -167,6 +186,8 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 			} else {
 				node.parent.right = null;
 			}
+			
+			afterRemove(node);
 		}
 	}
 	
