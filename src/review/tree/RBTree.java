@@ -3,7 +3,7 @@ package review.tree;
 import java.util.Comparator;
 
 /**
- * 完美匹配 24 树
+ * 完美匹配【2，4】树
  * 
  * 红黑树性质：
  * 
