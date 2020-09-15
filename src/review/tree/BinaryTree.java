@@ -326,7 +326,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 		
 		public Node(E element, Node<E> parent) {
 			this.element = element;
-			this.parent = parent; 
+			this.parent = parent;
 		}
 		
 		public boolean hasTowChildren() {
@@ -343,6 +343,17 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 		
 		public boolean isRightChild() {
 			return parent != null && this == parent.right;
+		}
+		
+		// 兄弟节点
+		public Node<E> sibling() {
+			if (isLeftChild()) {
+				return parent.right;
+			}
+			if (isRightChild()) {
+				return parent.left;
+			}
+			return null;
 		}
 	}
 

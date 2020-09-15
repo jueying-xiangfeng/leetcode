@@ -35,7 +35,7 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.ParagraphAction;
  */
 
 @SuppressWarnings("unused")
-public class AVLTree<E> extends BinarySearchTree<E> {
+public class AVLTree<E> extends BBST<E> {
 	
 	public AVLTree() {
 		this(null);
@@ -97,50 +97,14 @@ public class AVLTree<E> extends BinarySearchTree<E> {
 		}
 	}
 	
-	
-	// 向左旋转
-	private void rotateLeft(Node<E> grand) {
-		Node<E> parent = grand.right;
-		Node<E> child = parent.left;
-		
-		grand.right = child;
-		parent.left = grand;
-		afterRotate(grand, parent, child);
-	}
-	
-	// 向右旋转
-	private void rotateRight(Node<E> grand) {
-		Node<E> parent = grand.left;
-		Node<E> child = parent.right;
-		
-		grand.left = child;
-		parent.right = grand;
-		afterRotate(grand, parent, child);
-	}
-	
-	private void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
-		// 让 parent 成为 子树的根节点
-		parent.parent = grand.parent;
-		
-		if (grand.isLeftChild()) {
-			grand.parent.left = parent;
-		} else if (grand.isRightChild()) {
-			grand.parent.right = parent;
-		} else { // 根节点
-			root = parent;
-		}
-		// 更新 child 的 parent
-		if (child != null) {
-			child.parent = grand;
-		}
-		// 更新 grand 的 parent
-		grand.parent = parent;
+	@Override
+	protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
+		super.afterRotate(grand, parent, child);
+
 		// 更新高度
 		updateHeight(grand);
 		updateHeight(parent);
 	}
-	
-	
 	
 	/**
 	 * 节点是否平衡
