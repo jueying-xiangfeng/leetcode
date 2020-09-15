@@ -216,6 +216,23 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 	}
 	
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		toString(sb, root, "");
+		return sb.toString();
+	}
+	private void toString(StringBuilder sb, Node<E> node, String prefix) {
+		if (node == null) return;
+		
+		sb.append(prefix).append("【");
+		sb.append(node.element).append("】").append("\n");
+		
+		toString(sb, node.left, prefix + "【L】");
+		toString(sb, node.right, prefix + "【R】");
+	}
+	
+	
 	
 	
 	@Override

@@ -49,22 +49,22 @@ public class _145_二叉树的后序遍历 {
     	
     	Stack<TreeNode> stack = new Stack<>();
     	stack.push(node);
-    	TreeNode preNode = node;
+    	TreeNode preNode = null;
     	
     	while (!stack.isEmpty()) {
 			
     		TreeNode top = stack.peek();
     		
-    		if ((top.left == null && top.right == null) || (preNode == top.left || preNode == top.right)) {
-    			node = stack.pop();
-				list.add(node.val);
-				preNode = node;
+    		if ((top.left == null && top.right == null) || (preNode != null && (preNode == top.left || preNode == top.right))) {
+				list.add(top.val);
+				preNode = top;
+                stack.pop();
 			} else {
-				if (node.right != null) {
-					stack.push(node.right);
+				if (top.right != null) {
+					stack.push(top.right);
 				}
-				if (node.left != null) {
-					stack.push(node.left);
+				if (top.left != null) {
+					stack.push(top.left);
 				}
 			}
 		}
