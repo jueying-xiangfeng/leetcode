@@ -307,7 +307,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 	public static abstract class Visitor<E> {
 		boolean stop;
 		// 返回 true 代表停止遍历
-		abstract boolean visit(E element);
+		public abstract boolean visit(E element);
 	}
 	
 	

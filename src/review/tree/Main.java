@@ -70,7 +70,7 @@ public class Main {
 		
 		System.out.println("前序遍历 ================================");
 		tree.preorder(new Visitor<Integer>() {
-			boolean visit(Integer element) {
+			public boolean visit(Integer element) {
 				System.out.println(element);
 				return element == 5 ? true : false;
 			}
@@ -83,7 +83,7 @@ public class Main {
 		
 		System.out.println("中序遍历 ================================");
 		tree.inorder(new Visitor<Integer>() {
-			boolean visit(Integer element) {
+			public boolean visit(Integer element) {
 				System.out.println(element);
 				return element == 5 ? true : false;
 			}
@@ -96,7 +96,7 @@ public class Main {
 
 		System.out.println("后序遍历 ================================");
 		tree.postorder(new Visitor<Integer>() {
-			boolean visit(Integer element) {
+			public boolean visit(Integer element) {
 				System.out.println(element);
 				return element == 5 ? true : false;
 			}
@@ -106,7 +106,7 @@ public class Main {
 		// 7, 4, 9, 2, 5, 8, 11, 3
 		System.out.println("层序遍历 ================================");
 		tree.levelOrder(new Visitor<Integer>() {
-			boolean visit(Integer element) {
+			public boolean visit(Integer element) {
 				System.out.println(element);
 				return element == 5 ? true : false;
 			}
