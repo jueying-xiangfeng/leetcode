@@ -110,6 +110,12 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 	protected void afterRemove(Node<E> node) {  }
 	
 	
+	/**
+	 * 删除 node 之后的调整 
+	 * @param node - 被删除的节点
+	 */
+	protected void afterRemove(Node<E> node, Node<E> replacement) {  }
+	
 	
 	/**
 	 * 删除 node -- 思路：
@@ -175,7 +181,10 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 				node.parent.right = replacement;
 			}
 			
-			afterRemove(node);
+//			afterRemove(node);
+//			afterRemove(node, replacement);
+			
+			afterRemove(replacement);
 			
 		} else if (node.parent == null) {
 			root = null;
@@ -186,6 +195,9 @@ public class BinarySearchTree<E> extends BinaryTree<E> {
 			} else {
 				node.parent.right = null;
 			}
+			
+//			afterRemove(node);
+//			afterRemove(node, null);
 			
 			afterRemove(node);
 		}

@@ -149,13 +149,17 @@ public class Main {
 		for (int i = 0; i < data.length; i++) {
 			tree.add(data[i]);
 		}
-		
 		BinaryTrees.println(tree);
-		
 		System.out.println("================================");
 		
+		for (int i = 0; i < data.length; i++) {
+			tree.remove(data[i]);
+			System.out.println("---------------------------------------");
+			System.out.println("【" + data[i] + "】");
+			BinaryTrees.println(tree);
+		}
 	}
-		
+	
 	public static void main(String[] args) {
 		
 //		bst_test1();
