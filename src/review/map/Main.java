@@ -20,10 +20,26 @@ public class Main {
 		});
 	}
 	
+	static void test2() {
+		review.set.Set<String> set = new TreeSet<>();
+		set.add("c");
+		set.add("b");
+		set.add("c");
+		set.add("c");
+		set.add("a");
+		
+		set.traversal(new review.tree.BinaryTree.Visitor<String>() {
+			public boolean visit(String element) {
+				System.out.println(element);
+				return false;
+			}
+		});
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		test1();
+		test2();
 	}
 
 }
